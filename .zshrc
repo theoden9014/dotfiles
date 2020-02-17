@@ -1,3 +1,5 @@
+# for profiler
+#zmodload zsh/zprof
 #
 # Setup zplug
 #
@@ -38,8 +40,12 @@ zplug "plugins/kubectl", from:oh-my-zsh
 zplug "plugins/golang", from:oh-my-zsh
 
 
-if ! zplug check; then
-    zplug install
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
 fi
 
 zplug load
@@ -175,3 +181,6 @@ function update-anyenv {
         popd
     done
 }
+
+# for profiler
+#zprof

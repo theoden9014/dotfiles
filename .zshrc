@@ -56,7 +56,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # SSH Agent
 { eval "$(ssh-agent)" > /dev/null }
-ssh-add -k .ssh/id_rsa* > /dev/null
+ssh-add -q -k .ssh/id_rsa*
 
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"

@@ -62,7 +62,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # SSH Agent
 { eval "$(ssh-agent)" > /dev/null }
-ssh-add -q -k .ssh/id_rsa*
+ssh-add -q -k ${HOME}/.ssh/id_rsa*
 
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"
@@ -82,13 +82,16 @@ export PATH="$HOME/.nodenv/bin:$PATH"
 export NODE_PATH=$(npm root -g)
 
 # Go
+export GOENV_DISABLE_GOPATH=1
+#{ eval "$(goenv init -)" }
 export GOPATH="$HOME/.local/go"
+export PATH="$PATH:$GOPATH/bin"
 export GOROOT=/usr/local/opt/go
 export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
+export GOPRIVATE=github.dena.jp
 
 # Java
-# export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
-export JAVA_HOME="$(/usr/libexec/java_home)"
+export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
 
 ## android-sdk
 export ANDROID_HOME="/usr/local/share/android-sdk"
@@ -111,7 +114,7 @@ export PATH="${PATH}:$ANDROID_NDK_HOME"
 alias emacs='emacs -nw'
 
 # GCP
-export CLOUDSDK_PYTHON=$(which python2)
+export CLOUDSDK_PYTHON=$(which python3)
 export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/.config/gcloud/application_default_credentials.json"
 export PATH="${PATH}:/Users/junki.kaneko/Library/go_appengine"
 # The next line updates PATH for the Google Cloud SDK.
@@ -135,7 +138,7 @@ export PATH="/usr/local/opt/openssl/bin:$PATH"
 #export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
 
 # Dir ENV
-eval "$(direnv hook bash)"
+eval "$(direnv hook zsh)"
 
 #
 # Alias
@@ -180,6 +183,53 @@ function update-anyenv {
         done
         popd
     done
+}
+
+function vpn-connect {
+    networksetup -connectpppoeservice JP-VPN-MFA
+    vpn_status="$(networksetup -showpppoestatus JP-VPN-MFA)"
+    while [ $vpn_status != "connected" ]; do
+	sleep 1
+	vpn_status="$(networksetup -showpppoestatus JP-VPN-MFA)"
+    done
+}
+
+function vpn-disconnect {
+    networksetup -disconnectpppoeservice JP-VPN-MFA
+}
+
+function gcloudctx {
+    export _PS1
+    export GCLOUDCTX_NAME
+
+    if [[ -z "$_PS1" ]]; then
+	_PS1=$PS1
+    fi
+
+    case $1 in
+	"" | "ls" | "list")
+	    gcloud config configurations list
+	    GCLOUDCTX_NAME=""
+	    ;;
+	"add" | "create")
+	    GCLOUDCTX_NAME=$2
+	    gcloud config configurations create $GCLOUDCTX_NAME
+	    ;;
+	del*)
+	    GCLOUDCTX_NAME=$2
+	    gcloud config configurations delete $GCLOUDCTX_NAME
+	    GCLOUDCTX_NAME=""
+	    ;;
+	*)
+	    GCLOUDCTX_NAME=$1
+	    gcloud config configurations activate $GCLOUDCTX_NAME
+	    ;;
+    esac
+    if [[ -n "$GCLOUDCTX_NAME" ]] && [[ ! "$PS1" =~ "^$GCLOUDCTX_NAME" ]]; then
+	PS1="$GCLOUDCTX_NAME $_PS1"
+    else
+	PS1=$_PS1
+    fi
 }
 
 # for profiler

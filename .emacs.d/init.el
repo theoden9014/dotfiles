@@ -1,3 +1,4 @@
+
 (require 'cl)
 
 ;;--------------------------------------------------------------------------------
@@ -47,14 +48,25 @@
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
-(dolist (package '(use-package))
-   (unless (package-installed-p package)
-     (package-install package)
-     (package-install flycheck)
-     ))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; check if each package is installed and install it if is not
+(dolist (pkg '(use-package flycheck))
+  (unless (package-installed-p pkg)
+    (package-refresh-contents)
+    (package-install pkg)
+    ))
 
 (eval-when-compile
    (require 'use-package))
+
+
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+
 
 (use-package flycheck)
 

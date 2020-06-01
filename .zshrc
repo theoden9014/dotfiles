@@ -83,15 +83,15 @@ export NODE_PATH=$(npm root -g)
 
 # Go
 export GOENV_DISABLE_GOPATH=1
-#{ eval "$(goenv init -)" }
+{ eval "$(goenv init -)" }
 export GOPATH="$HOME/.local/go"
 export PATH="$PATH:$GOPATH/bin"
-export GOROOT=/usr/local/opt/go
-export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
+# export GOROOT=/usr/local/opt/go
+# export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
 export GOPRIVATE=github.dena.jp
 
 # Java
-export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+export JAVA_HOME="$(/usr/libexec/java_home)"
 
 ## android-sdk
 export ANDROID_HOME="/usr/local/share/android-sdk"

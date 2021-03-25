@@ -82,19 +82,18 @@ export PATH="$HOME/.nodenv/bin:$PATH"
 export NODE_PATH=$(npm root -g)
 
 # Go
-export GOENV_DISABLE_GOPATH=1
-{ eval "$(goenv init -)" }
+#export GOENV_ROOT="$HOME/.goenv"
+#export PATH="$GOENV_ROOT/bin:$PATH"
+#export GOENV_DISABLE_GOPATH=2
+#{ eval "$(goenv init -)" }
 export GOPATH="$HOME/.local/go"
-export PATH="$PATH:$GOPATH/bin"
-# export GOROOT=/usr/local/opt/go
-# export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
-export GOPRIVATE=github.dena.jp
+export PATH="$PATH:$GOPATH/bin:/usr/local/opt/go/bin"
 
 # Java
 export JAVA_HOME="$(/usr/libexec/java_home)"
 
 ## android-sdk
-export ANDROID_HOME="/usr/local/share/android-sdk"
+export ANDROID_HOME="${HOME}/Library/Android/sdk"
 #export ANDROID_HOME="$HOME/Library/Android/sdk"
 #export ANDROID_SDK_ROOT=$ANDROID_HOME
 ## export ANDROID_HOME="$HOME/Library/Android/sdk"
@@ -147,6 +146,9 @@ alias gcd='cd $(ghq list -p | peco)'
 alias ldd='otool -L'
 alias lsusb='system_profiler SPUSBDataType'
 alias helm2="/usr/local/opt/helm@2/bin/helm"
+alias kc=kubectl
+alias kx=kubectx
+alias kns=kubens
 
 function adb-screenshot {
     local datetime=`date +"%Y%m%d-%H%M%S"`
@@ -234,3 +236,4 @@ function gcloudctx {
 
 # for profiler
 #zprof
+export PATH="/usr/local/opt/openjdk/bin:$PATH"

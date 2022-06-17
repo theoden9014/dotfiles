@@ -8,22 +8,24 @@ export ZPLUG_CACHE_DIR="${HOME}/.cache/zplug"
 if [[ -s "${ZPLUG_HOME}/init.zsh" ]]; then
   source ${ZPLUG_HOME}/init.zsh
 fi
-#zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+# zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-zplug "modules/environment", from:prezto
+zplug 'zsh-users/zsh-completions', use:'src/_*', lazy:true
+
+# zplug "modules/environment", from:prezto
 zplug "modules/terminal", from:prezto
 zplug "modules/editor", from:prezto
 zplug "modules/history", from:prezto
 zplug "modules/directory", from:prezto
 zplug "modules/spectrum", from:prezto
 zplug "modules/utility", from:prezto
-zplug "modules/completion", from:prezto
+# zplug "modules/completion", from:prezto
 zplug "modules/git", from:prezto
-zplug "modules/homebrew", from:prezto
-zplug "modules/ruby", from:prezto
-zplug "modules/python", from:prezto
+# zplug "modules/homebrew", from:prezto
+# zplug "modules/ruby", from:prezto
+# zplug "modules/python", from:prezto,
 zplug "modules/autosuggestions", from:prezto
-zplug "modules/tmux", from:prezto
+# zplug "modules/tmux", from:prezto
 zplug "modules/syntax-highlighting", from:prezto
 zplug "moduels/history-substring-search", from:prezto
 
@@ -31,13 +33,16 @@ zplug 'modules/prompt', from:prezto
 zstyle ':prezto:module:prompt' theme 'sorin'
 zstyle ':prezto:*:*' color 'yes'
 
-zstyle ':prezto:module:python:virtualenv' auto-switch 'yes'
-#zstyle ':prezto:module:tmux:auto-start' local 'yes'
+# zstyle ':prezto:module:python:virtualenv' auto-switch 'yes'
+# zstyle ':prezto:module:tmux:auto-start' local 'yes'
 
-zstyle ':prezto:module:syntax-highlighting' color 'yes'
+# zstyle ':prezto:module:syntax-highlighting' color 'yes'
 
 zplug "plugins/kubectl", from:oh-my-zsh
 zplug "plugins/golang", from:oh-my-zsh
+
+zplug 'lib/functions', from:oh-my-zsh
+zplug "wuotr/zsh-plugin-vscode", from:"github", use:"vscode.plugin.zsh"
 
 
 # Install plugins if there are plugins that have not been installed
@@ -53,7 +58,6 @@ zplug load
 #
 # Configuration from here
 #
-
 # Prompt
 autoload -Uz promptinit
 promptinit
@@ -64,44 +68,30 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 { eval "$(ssh-agent)" > /dev/null }
 ssh-add -q -k ${HOME}/.ssh/id_rsa*
 
-# Homebrew
-export PATH="/usr/local/sbin:$PATH"
-export HOMEBREW_GITHUB_API_TOKEN=$GITHUB_API_TOKEN
-
 # rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 { eval "$(rbenv init -)" }
-
 # pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"
-{ eval "$(pyenv init -)" }
-
+{ eval "$(pyenv init --path)" }
 # nodenv
 export PATH="$HOME/.nodenv/bin:$PATH"
 { eval "$(nodenv init -)" }
 export NODE_PATH=$(npm root -g)
 
 # Go
-#export GOENV_ROOT="$HOME/.goenv"
-#export PATH="$GOENV_ROOT/bin:$PATH"
-#export GOENV_DISABLE_GOPATH=2
-#{ eval "$(goenv init -)" }
 export GOPATH="$HOME/.local/go"
 export PATH="$PATH:$GOPATH/bin:/usr/local/opt/go/bin"
 
 # Java
 export JAVA_HOME="$(/usr/libexec/java_home)"
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
 
 ## android-sdk
 export ANDROID_HOME="${HOME}/Library/Android/sdk"
-#export ANDROID_HOME="$HOME/Library/Android/sdk"
-#export ANDROID_SDK_ROOT=$ANDROID_HOME
-## export ANDROID_HOME="$HOME/Library/Android/sdk"
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
-## export PATH="$PATH:$ANDROID_HOME/tools"
 export PATH="$ANDROID_HOME/tools/bin:$PATH"
 export PATH="$ANDROID_HOME/emulator:$PATH"
-#export PATH="$ANDROID_HOME/ndk-bundle:$PATH"
 
 # Android
 export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
@@ -109,20 +99,13 @@ export ANDROID_HOME="/usr/local/share/android-sdk"
 export ANDROID_NDK_HOME="${ANDROID_HOME}/ndk-bundle/"
 export PATH="${PATH}:$ANDROID_NDK_HOME"
 
-# Emacs
-alias emacs='emacs -nw'
-
 # GCP
 export CLOUDSDK_PYTHON=$(which python3)
 export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/.config/gcloud/application_default_credentials.json"
-export PATH="${PATH}:/Users/junki.kaneko/Library/go_appengine"
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f "${HOME}/.local/google-cloud-sdk/path.zsh.inc" ]; then . "${HOME}/.local/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOME/Library/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Library/google-cloud-sdk/path.zsh.inc"; fi
 # The next line enables shell command completion for gcloud.
-if [ -f "${HOME}/.local/google-cloud-sdk/completion.zsh.inc" ]; then . "${HOME}/.local/google-cloud-sdk/completion.zsh.inc"; fi
-
-# VScode
-export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+if [ -f "$HOME/Library/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Library/google-cloud-sdk/completion.zsh.inc"; fi
 
 # Qt
 export QT_DIR=/usr/local/Cellar/qt/5.10.0
@@ -139,6 +122,7 @@ export PATH="/usr/local/opt/openssl/bin:$PATH"
 # Dir ENV
 eval "$(direnv hook zsh)"
 
+
 #
 # Alias
 #
@@ -149,6 +133,12 @@ alias helm2="/usr/local/opt/helm@2/bin/helm"
 alias kc=kubectl
 alias kx=kubectx
 alias kns=kubens
+
+function kill-malware {
+    launchctl unload /Applications/SKYSEAClientView.app/LaunchAgents/jp.skygroup.agent.SkyAgent.plist
+    launchctl unload /Applications/SKYSEAClientView.app/LaunchAgents/jp.skygroup.agent.UploadAssetsAtLogin.plist
+    launchctl remove jp.skygroup.agent.SkyAgent
+}
 
 function adb-screenshot {
     local datetime=`date +"%Y%m%d-%H%M%S"`
@@ -196,10 +186,6 @@ function vpn-connect {
     done
 }
 
-function vpn-disconnect {
-    networksetup -disconnectpppoeservice JP-VPN-MFA
-}
-
 function gcloudctx {
     export _PS1
     export GCLOUDCTX_NAME
@@ -236,4 +222,3 @@ function gcloudctx {
 
 # for profiler
 #zprof
-export PATH="/usr/local/opt/openjdk/bin:$PATH"

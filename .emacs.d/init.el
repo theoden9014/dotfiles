@@ -1,25 +1,15 @@
-
-;; (require 'cl)
-
-;;--------------------------------------------------------------------------------
-;; Load Path
-;;--------------------------------------------------------------------------------
-(defvar darwin-p (eq system-type 'darwin))      ; for Mac OS X
-(defvar nt-p (eq system-type 'windows-nt))      ; for Windows
-
-;; for GUI (window-system)
-(when window-system (load "window-system"))
+(eval-when-compile
+  (require 'cl-lib))
 
 ;; Don't show start display
-(setq inhibit-startup-message t)
-(setq initial-scratch-message nil)
+;; (setq inhibit-startup-message t)
+;; (setq initial-scratch-message nil)
 
 ;;--------------------------------------------------------------------------------
 ;; Package Manager
 ;;--------------------------------------------------------------------------------
 (setq package-archives
-        '(("marmalade"   . "http://marmalade-repo.org/packages/")
-          ("gnu"         . "http://elpa.gnu.org/packages/")
+        '(("gnu"         . "http://elpa.gnu.org/packages/")
           ("org"         . "http://orgmode.org/elpa/")
           ("melpa"       . "https://melpa.org/packages/")
           ("melpa-stable" . "https://stable.melpa.org/packages/")))
@@ -78,6 +68,9 @@
 ;; Language configuration
 ;;--------------------------------------------------------------------------------
 ;; Go
+(use-package go-mode
+  :ensure t
+  :commands go-mode)
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)

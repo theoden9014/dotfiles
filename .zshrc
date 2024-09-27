@@ -66,7 +66,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # SSH Agent
 { eval "$(ssh-agent)" > /dev/null }
-ssh-add -q -k ${HOME}/.ssh/id_rsa*
+ssh-add -q -k ${HOME}/.ssh/id* 2>/dev/null
 
 # rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
@@ -77,10 +77,13 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 # nodenv
 export PATH="$HOME/.nodenv/bin:$PATH"
 { eval "$(nodenv init -)" }
-export NODE_PATH=$(npm root -g)
+
+# JetBrains
+export PATH="$PATH:$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
 
 # Go
 export GOPATH="$HOME/.local/go"
+export GODEBUG="asyncpreemptoff=1"
 export PATH="$PATH:$GOPATH/bin:/usr/local/opt/go/bin"
 
 # Java
@@ -92,12 +95,6 @@ export ANDROID_HOME="${HOME}/Library/Android/sdk"
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
 export PATH="$ANDROID_HOME/tools/bin:$PATH"
 export PATH="$ANDROID_HOME/emulator:$PATH"
-
-# Android
-export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
-export ANDROID_HOME="/usr/local/share/android-sdk"
-export ANDROID_NDK_HOME="${ANDROID_HOME}/ndk-bundle/"
-export PATH="${PATH}:$ANDROID_NDK_HOME"
 
 # GCP
 export CLOUDSDK_PYTHON=$(which python3)
@@ -121,6 +118,10 @@ export PATH="/usr/local/opt/openssl/bin:$PATH"
 
 # Dir ENV
 eval "$(direnv hook zsh)"
+
+# SDKMan
+export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+[[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 
 
 #
